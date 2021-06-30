@@ -1,0 +1,55 @@
+﻿@page "/databinding"
+<h3>Data Binding Demo</h3>
+<hr />
+<h3>One-way Data Binding</h3>
+<div>
+    <b>Name :</b>@Name
+</div>
+<div>
+    <b>Name with sallutation:</b> @(Gender=="Male"? $"Mr. {Name}":$"Mrs. {Name}")
+</div>
+<div>
+    <input value="@Name" />
+</div>
+
+
+<h3>Two-way Data Binding</h3>
+
+<div>
+    @*<input value="@Name" @onchange="@(e=> { Name = e.Value.ToString(); })" />*@
+    @*<input value="@Name" @onchange="SetName" />*@
+    @*<input @bind="@Name" />*@
+    @*<input @bind-value="@Name" />*@
+    <input @bind="@Name" @bind:event="oninput" />
+</div>
+<p>Attrubute/style binding</p>
+<b>Colour :</b> <input @bind="@Colour" />
+<div @bind-style="Colour" @bind-style:event="onchange">
+    <p> Background color of the text changes</p>
+</div>
+
+<div class="mt-2">
+    <textarea @bind="Description" @bind:event="oninput" maxlength="@(Description.Length> 15 ? 15:15)" >
+
+    </textarea  >
+    <div class="@(Description.Length>14 ? "text-danger":"")">
+        @if (Description.Length > 0)
+        {
+            <p>@Description.Length</p>
+        }
+
+    </div>
+</div>
+
+@code {
+    protected string Description { get; set; } = string.Empty;
+    protected string Name { get; set; } = "Tom";
+    protected string Gender { get; set; } = "Male";
+    protected string Colour { get; set; } = "background-color:white";
+
+    protected void SetName(ChangeEventArgs e)
+    {
+        Name = e.Value.ToString();
+    }
+
+}

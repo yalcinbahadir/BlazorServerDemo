@@ -1,0 +1,27 @@
+﻿@page "/"
+@page "/employeelist"
+@inherits EmployeeListBase
+<h3>Selected Employees Count - @SelectedEmployesCount</h3>
+<hr />
+@if (Employees.Count() == 0)
+{
+    <div class="spinner">
+    </div>
+}
+else
+{
+    <div>
+        Show footer <input type="checkbox" @bind="ShowFooter" />
+    </div>
+    <div class="card-deck">
+
+        @foreach (var employee in Employees)
+        {
+            <DisplayEmployee Employee="employee" 
+                             ShowFooter="ShowFooter" ChildCheckBoxEvent="FireParentMethod" />
+        }
+    </div>
+}
+
+
+

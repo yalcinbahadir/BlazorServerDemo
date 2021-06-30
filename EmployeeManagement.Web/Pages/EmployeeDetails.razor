@@ -1,0 +1,168 @@
+﻿@page "/employeedetails"
+@page "/employeedetails/{id}"
+@inherits EmployeeDetailsBase
+
+@if (Employee == null || Employee.Department == null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <div class="row justify-content-center m-3">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    <h1>@Employee.FirstName @Employee.LastName </h1>
+
+                </div>
+
+                <div class="card-body text-center">
+                    <figure>
+                        <img class="card-img-top imageThumbnail"
+                             src="@Employee.PhotoPath"
+                              />
+
+                        <h4 class="text-left mt-2">Employee ID : @Employee.EmployeeId</h4>
+                        <h4 class="text-left">Email : @Employee.Email</h4>
+                        <h4 class="text-left">Department : @Employee.Department.DepartmentName</h4>
+                    </figure>
+
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/" class="btn btn-primary">Back</a>
+                    <a href="#" class="btn btn-primary">Edit</a>
+                    <a href="#" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row justify-content-center m-3">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header @testStyle">
+                    <h1>@Employee.FirstName @Employee.LastName @Coordiates</h1>
+
+                </div>
+
+                <div class="card-body text-center">
+                    <figure>
+                        <div>
+                            <button class="btn btn-primary btn-sm" @onclick="FirstPhoto">Change</button>
+                            <img class="card-img-top imageThumbnail" style="width:200px"
+                                 src="@photoPath"
+                                 @onmousemove="Mouse_move" @onmouseout="Mouse_out" />
+                            <button class="btn btn-primary btn-sm" @onclick="NextPhoto">Change</button>
+                        </div>
+                        <h4 class="text-left mt-2">Employee ID : @Employee.EmployeeId</h4>
+                        <h4 class="text-left">Email : @Employee.Email</h4>
+                        <h4 class="text-left">Department : @Employee.Department.DepartmentName</h4>
+                    </figure>
+
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/" class="btn btn-primary">Back</a>
+                    <a href="@($"editemployee/{Employee.EmployeeId}")" class="btn btn-primary">Edit</a>
+                    <a href="#" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header @testStyle">
+                    <h1>@SelectedEmployee.FirstName @SelectedEmployee.LastName @Coordiates</h1>
+
+                </div>
+
+                <div class="card-body text-center">
+                    <figure>
+                        <div>
+                            <button class="btn btn-primary btn-sm" @onclick="FirstEmployee">Change</button>
+                            <img class="card-img-top imageThumbnail" style="width:200px"
+                                 src="@SelectedEmployee.PhotoPath"
+                                 @onmousemove="Mouse_move" @onmouseout="Mouse_out" />
+                            <button class="btn btn-primary btn-sm" @onclick="NextEmployee">Change</button>
+                        </div>
+                        <h4 class="text-left mt-2">Employee ID : @SelectedEmployee.EmployeeId</h4>
+                        <h4 class="text-left">Email : @SelectedEmployee.Email</h4>
+                        <h4 class="text-left">Department : @SelectedEmployee.Department.DepartmentName</h4>
+                    </figure>
+
+                </div>
+                <div><button class="btn btn-primary" @onclick="Toogle">@btnText footer</button></div>
+                <div class="card-footer text-center @isvisible">
+                    <a href="/" class="btn btn-primary">Back</a>
+                    <a href="#" class="btn btn-primary">Edit</a>
+                    <a href="#" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    string testStyle = string.Empty;
+
+    protected void Toogle()
+    {
+        show = !show;
+        isvisible = show ? "" : "invisible";
+        btnText= show ? "Hide" : "Show"; ;
+    }
+
+
+
+
+    protected void FirstPhoto()
+    {
+        index--;
+        if (index<0)
+        {
+            index = photoPaths.Length-1;
+        }
+        photoPath = photoPaths[index];
+    }
+    protected void NextPhoto()
+    {
+        index++;
+        if (index > photoPaths.Length - 1)
+        {
+            index = 0;
+        }
+        photoPath = photoPaths[index];
+    }
+
+    protected void Mouse_move(MouseEventArgs e)
+    {
+        Coordiates = $" X:{e.ClientX} Y:{e.ClientY}";
+        testStyle = "bg-warning";
+        photoPath = "images/sara.png";
+    }
+    protected void Mouse_out(MouseEventArgs e)
+    {
+        Coordiates = "";
+        testStyle = string.Empty;
+        photoPath = Employee.PhotoPath;
+    }
+
+    protected void FirstEmployee()
+    {
+        index--;
+        if (index <= 0)
+        {
+            index = Employees.Count()-1;
+        }
+        SelectedEmployee = Employees[index];
+    }
+    protected void NextEmployee(MouseEventArgs e)
+    {
+
+        index++;
+        if (index >= Employees.Count())
+        {
+            index = 0;
+        }
+        SelectedEmployee = Employees[index];
+    }
+}
