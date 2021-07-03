@@ -11,10 +11,11 @@ namespace EmployeeManagement.Web.Services.EmployeeService
     {
         public const string clientName = "blazorClient";
         private IHttpClientFactory _clientFactory;
-
-        public EmployeeService(IHttpClientFactory clientFactory)
+        private HttpClient _httpClient;
+        public EmployeeService(IHttpClientFactory clientFactory, HttpClient httpClient)
         {
             _clientFactory = clientFactory;
+            _httpClient = httpClient;
         }
 
 
@@ -56,9 +57,17 @@ namespace EmployeeManagement.Web.Services.EmployeeService
             }
             return employee;
         }
-        public Task<bool> Delete(Employee entity)
+
+        public async Task<bool> Delete(Employee entity)
         {
-            throw new NotImplementedException();
+            HttpClient httpClient = _clientFactory.CreateClient(clientName);
+            var response = await httpClient.DeleteAsync($"employees/{entity.EmployeeId}");
+            Employee employee = new Employee();
+            if (response.IsSuccessStatusCode)
+            {
+                employee = response.Content.ReadAsAsync<Employee>().Result;
+            }
+            return employee !=null;
         }
 
 

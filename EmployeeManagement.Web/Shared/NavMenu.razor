@@ -12,16 +12,38 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="/editemployee" Match="NavLinkMatch.All" @onclick="HandelClick">
+                <span class="oi oi-file" aria-hidden="true"></span> Create
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="/databinding" Match="NavLinkMatch.All">
+                <span class="oi oi-file" aria-hidden="true"></span> Data binding
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-file" aria-hidden="true"></span> Demo
+            </NavLink>
+        </li>
     </ul>
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
 
+    [Inject]
+    private NavigationManager Navigator { get; set; }
+    private bool collapseNavMenu = true;
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void HandelClick()
+    {
+        Navigator.NavigateTo("/editemployee", true);
     }
 }

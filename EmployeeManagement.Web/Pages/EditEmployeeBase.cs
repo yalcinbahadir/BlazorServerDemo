@@ -22,7 +22,7 @@ namespace EmployeeManagement.Web.Pages
 
         public List<Department> Departments { get; set; } = new List<Department>();
 
-
+        protected string pageName = "Edit";
 
         protected override async Task OnInitializedAsync()
         {
@@ -35,11 +35,13 @@ namespace EmployeeManagement.Web.Pages
         {
             if (int.TryParse(Id, out int id))
             {
-                Model= MapToModel(await EmployeeService.Get(id));
+                pageName = "Edit";
+                Model = MapToModel(await EmployeeService.Get(id));
             } 
             else
             {
-                Model = new EmployeeModel();
+                pageName = "Add";
+                Model = new EmployeeModel() { DepartmentId = "1", DateOfBrith = DateTime.Now, PhotoPath = "images/nophoto.png" };
             }   
         }
 
@@ -50,16 +52,37 @@ namespace EmployeeManagement.Web.Pages
             if (Model.EmployeeId==0)
             {
                 var employee = MapToEmployee(Model);
-                await EmployeeService.Add(employee);
+                var result=await EmployeeService.Add(employee);
+                if (result != null)
+                {
+                    Navigator.NavigateTo("/employeelist");
+                }
             }
             else
             {
                 var employee = await EmployeeService.Get(Model.EmployeeId);
                 MapToEmployee(employee,Model);
-                await EmployeeService.Update(employee);
-                
+                var result=await EmployeeService.Update(employee);
+                if (result !=null)
+                {
+                    Navigator.NavigateTo("/employeelist");
+                }
             }
-            Navigator.NavigateTo("/employeelist");
+            
+        }
+
+        protected async Task Delete()
+        {
+            var empToDelete = MapToEmployee(Model);
+            if (empToDelete !=null)
+            {
+                var result=await EmployeeService.Delete(empToDelete);
+                if (result)
+                {
+                    Navigator.NavigateTo("/employeelist",true);
+                }
+            }
+            
         }
 
         private EmployeeModel MapToModel(Employee employee)
@@ -73,6 +96,7 @@ namespace EmployeeManagement.Web.Pages
             model.Gender = employee.Gender;
             model.PhotoPath = employee.PhotoPath;
             model.DepartmentId = employee.DepartmentId.ToString();
+            model.Department.DepartmentName = employee.Department.DepartmentName;
             return model;
         }
 

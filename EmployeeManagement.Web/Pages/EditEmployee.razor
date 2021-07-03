@@ -3,26 +3,33 @@
 @inherits EditEmployeeBase
 
 <div class="card">
-    <div class="card-header">Edit Employee</div>
+    <div class="card-header">@pageName Employee</div>
     <div class="card-body">
         <EditForm Model="@Model" OnValidSubmit="HandelValidSubmit">
-            <DataAnnotationsValidator />
             <ValidationSummary></ValidationSummary>
+            @*<DataAnnotationsValidator />*@
+            <ObjectGraphDataAnnotationsValidator />
+
             <input type="hidden" name="EmployeeId" value="@Model.EmployeeId" />
             <div class="form-group row">
                 <label for="firstName" class="col-3">First Name</label>
                 <InputText @bind-Value="@Model.FirstName" id="firstName" class="form-control col-8" placeholder="First name" />
-
+                <ValidationMessage For="@(()=>Model.FirstName)"></ValidationMessage>
             </div>
             <div class="form-group row">
                 <label for="lastName" class="col-3">Last Name</label>
                 <InputText @bind-Value="@Model.LastName" id="lastName" class="form-control col-8" placeholder="Last name" />
-
+                <ValidationMessage For="@(()=>Model.LastName)"></ValidationMessage>
             </div>
             <div class="form-group row">
                 <label for="email" class="col-3">Email</label>
                 <InputText @bind-Value="@Model.Email" id="email" class="form-control col-8" placeholder="Email" />
-
+                <ValidationMessage For="@(()=>Model.Email)"></ValidationMessage>
+            </div>
+            <div class="form-group row">
+                <label for="confirmEmail" class="col-3">Confirm email</label>
+                <InputText @bind-Value="@Model.ConfirmEmail" id="confirmEmail" class="form-control col-8" placeholder="Confirm Email" />
+                <ValidationMessage For="@(()=>Model.ConfirmEmail)"></ValidationMessage>
             </div>
             <div class="form-group row">
                 <label for="department" class="col-3">Department</label>
@@ -34,10 +41,42 @@
                     }
 
                 </InputSelect>
+                <ValidationMessage For="@(()=>Model.DepartmentId)"></ValidationMessage>
+            </div>
+            <div class="form-group row">
+                <label for="department" class="col-3">Gender</label>
+                <InputSelect @bind-Value="@Model.Gender" id="gender" class="form-control col-8">
+                    <option value="" selected readonly hidden>--Select gender</option>
+                    @foreach (var gender in Enum.GetValues(typeof(EmployeeManagement.Models.Gender)))
+                    {
+                        <option value="@gender">@gender</option>
+                    }
 
+                </InputSelect>
+                <ValidationMessage For="@(()=>Model.Gender)"></ValidationMessage>
+            </div>
+            <div class="form-group row">
+                <label for="dateOfBrith" class="col-3">Date of birth</label>
+                <InputDate @bind-Value="@Model.DateOfBrith" id="dateOfBrith" class="form-control col-8" placeholder="Email" />
+                <ValidationMessage For="@(()=>Model.DateOfBrith)"></ValidationMessage>
+            </div>
+            <div class="form-group row">
+                <label for="photoPath" class="col-3">Photo path</label>
+                <InputText @bind-Value="@Model.PhotoPath" id="photoPath" class="form-control col-8" placeholder="Last name" />
 
             </div>
+            <div class="form-group row">
+                <label for="photoPath" class="col-3">Department name</label>
+                <InputText @bind-Value="@Model.Department.DepartmentName" id="photoPath" class="form-control col-8" placeholder="Department Name" />
+                <ValidationMessage For="@(()=>Model.Department.DepartmentName)"></ValidationMessage>
+            </div>
+
             <button class="btn btn-primary btn-block">Submit</button>
+            @if (Model.EmployeeId > 0)
+            {
+                <button class="btn btn-danger btn-block" @onclick="Delete" type="button">Delete</button>
+            }
+
 
         </EditForm>
 

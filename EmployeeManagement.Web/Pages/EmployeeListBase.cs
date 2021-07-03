@@ -34,6 +34,15 @@ namespace EmployeeManagement.Web.Pages
             }
         }
 
+        protected async Task HandelDelete(bool isDeleted)
+        {
+            if (isDeleted)
+            {
+                Employees = await EmployeeService.GetAll();
+            }
+
+        }
+
 
 
 

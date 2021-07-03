@@ -18,7 +18,8 @@ else
         @foreach (var employee in Employees)
         {
             <DisplayEmployee Employee="employee" 
-                             ShowFooter="ShowFooter" ChildCheckBoxEvent="FireParentMethod" />
+                             ShowFooter="ShowFooter" 
+                             ChildCheckBoxEvent="FireParentMethod" EmployeeDeletedEvent="HandelDelete"  />
         }
     </div>
 }
