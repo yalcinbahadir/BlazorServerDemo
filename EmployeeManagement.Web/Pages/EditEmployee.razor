@@ -76,9 +76,11 @@
             {
                 <button class="btn btn-danger btn-block" @onclick="Delete" type="button">Delete</button>
             }
-
-
         </EditForm>
+        <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete_Click" 
+                 ConfirmationMessage="@($"Are you sure you want to delete {Model.FirstName} {Model.LastName}")">
+
+        </Confirm>
 
 
 

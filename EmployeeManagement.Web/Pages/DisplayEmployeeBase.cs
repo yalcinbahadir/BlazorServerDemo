@@ -2,6 +2,7 @@
 using EmployeeManagement.Web.Services.EmployeeService;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using ProjectLibrary.Component;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,15 @@ namespace EmployeeManagement.Web.Pages
         public EventCallback<bool> ChildCheckBoxEvent { get; set; }
         [Parameter]
         public EventCallback<bool> EmployeeDeletedEvent { get; set; }
+        [Parameter]
+        public EventCallback<int> OnEmployeeDeleted { get; set; }
         [Inject]
         public IEmployeeService EmployeeService { get; set; }
         [Inject]
         public NavigationManager Navigator { get; set; }
+
+        protected ConfirmBase DeleteConfirmation { get; set; }
+
         private bool isChecked;
         protected async Task HandelCheckBoxEvent(ChangeEventArgs e)
         {
@@ -36,18 +42,23 @@ namespace EmployeeManagement.Web.Pages
            return $"/employeedetails/{id}";
         }
 
-        //protected async Task Delete()
+        //protected async Task Delete(MouseEventArgs e)
         //{
         //    var result = await EmployeeService.Delete(Employee);
-        //    if (result)
-        //    {
-        //        Navigator.NavigateTo("/", true);
-        //    }
+        //    await EmployeeDeletedEvent.InvokeAsync(result);
         //}
-        protected async Task Delete(MouseEventArgs e)
+       
+        protected void Delete_Click()
         {
-            var result = await EmployeeService.Delete(Employee);
-            await EmployeeDeletedEvent.InvokeAsync(result);
+            DeleteConfirmation.Show();
+        }
+        protected async Task ConfirmDelete_Click(bool deleteConfirmed)
+        {
+            if (deleteConfirmed)
+            {
+                var result = await EmployeeService.Delete(Employee);
+                await EmployeeDeletedEvent.InvokeAsync(result);
+            }
         }
     }
 }

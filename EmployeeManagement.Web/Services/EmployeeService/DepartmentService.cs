@@ -21,7 +21,14 @@ namespace EmployeeManagement.Web.Services.EmployeeService
         public async Task<Department> GetDepartment(int id)
         {
 
-            throw new NotImplementedException();
+            HttpClient httpClient = _clientFactory.CreateClient(clientName);
+            var response = await httpClient.GetAsync($"departments/{id}");
+           Department department = new Department();
+            if (response.IsSuccessStatusCode)
+            {
+                department = await response.Content.ReadAsAsync<Department>();
+            }
+            return department;
         }
 
         public async Task<IEnumerable<Department>> GetDepartments()

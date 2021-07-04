@@ -1,6 +1,7 @@
 ﻿using EmployeeManagement.Models;
 using EmployeeManagement.Web.Services.EmployeeService;
 using Microsoft.AspNetCore.Components;
+using ProjectLibrary.Component;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +25,29 @@ namespace EmployeeManagement.Web.Pages
 
         protected string pageName = "Edit";
 
+        protected ConfirmBase DeleteConfirmation { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             Departments = (await DepartmentService.GetDepartments()).ToList();
             
         }
 
-
+        protected async Task ConfirmDelete_Click(bool deleteConfirmed)
+        {
+            if (deleteConfirmed)
+            {
+                var empToDelete = MapToEmployee(Model);
+                if (empToDelete != null)
+                {
+                    var result = await EmployeeService.Delete(empToDelete);
+                    if (result)
+                    {
+                        Navigator.NavigateTo("/employeelist", true);
+                    }
+                }
+            }
+        }
         protected async override Task OnParametersSetAsync()
         {
             if (int.TryParse(Id, out int id))
@@ -71,18 +88,19 @@ namespace EmployeeManagement.Web.Pages
             
         }
 
-        protected async Task Delete()
+        protected void Delete()
         {
-            var empToDelete = MapToEmployee(Model);
-            if (empToDelete !=null)
-            {
-                var result=await EmployeeService.Delete(empToDelete);
-                if (result)
-                {
-                    Navigator.NavigateTo("/employeelist",true);
-                }
-            }
-            
+            DeleteConfirmation.Show();
+            //var empToDelete = MapToEmployee(Model);
+            //if (empToDelete !=null)
+            //{
+            //    var result=await EmployeeService.Delete(empToDelete);
+            //    if (result)
+            //    {
+            //        Navigator.NavigateTo("/employeelist",true);
+            //    }
+            //}
+
         }
 
         private EmployeeModel MapToModel(Employee employee)
