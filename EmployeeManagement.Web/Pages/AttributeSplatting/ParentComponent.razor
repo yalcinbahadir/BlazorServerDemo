@@ -1,0 +1,18 @@
+﻿@page "/attributesplatting/pc"
+<h3>ParentComponent</h3>
+<hr />
+@*<ChildComponent PlaceHolder="Demo" MaxLength="25" MinLength="5" Required="required" />*@
+
+<ChildComponent  InputAttributes="@AttributesFromParent" Value="Parent value"/>
+
+@code {
+
+    public Dictionary<string, object> AttributesFromParent { get; set; } = new Dictionary<string, object>
+    {
+         {"required", "required"},
+         {"placeholder", "Parent component placeholder"},
+         {"size", "111"},
+         {"maxlength", "155"}
+    };
+   
+}

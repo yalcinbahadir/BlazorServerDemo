@@ -1,0 +1,13 @@
+﻿<h3 style="@CascadedValue">-Child Component</h3>
+<hr />
+<CascadingValue Value="@CascadedValue">
+    <GrandChildComponent />
+</CascadingValue>
+
+
+
+@code {
+
+    [CascadingParameter]
+    public string CascadedValue { get; set; }
+}

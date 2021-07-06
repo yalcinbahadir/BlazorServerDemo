@@ -1,0 +1,19 @@
+﻿@page "/cascadingvalues/pc"
+<h3>Cascading values</h3>
+<hr />
+
+<h3 style="@Style">ParentComponent</h3>
+<hr />
+<CascadingValue Value="@Style">
+    <ChildComponent />
+</CascadingValue>
+
+
+
+
+
+
+@code {
+    public string Style { get; set; } = "color:red";
+
+}
